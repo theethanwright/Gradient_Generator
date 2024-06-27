@@ -28,7 +28,7 @@ function createCapsuleGeometry() {
 }
 
 function createDodecahedronGeometry() {
-  return new THREE.DodecahedronGeometry(5, 5); // radius
+  return new THREE.DodecahedronGeometry(5, 4); // radius
 }
 
 // Custom shader material

@@ -217,10 +217,10 @@ const params = {
   color3: [0, 0, 255],
   color3Alpha: 1,
   edgeAlpha: 0.0,
-  distortionStrength: 0.5,
-  colorNoiseScale: 1.0,
-  alphaNoiseScale: 1.0,
-  distortionNoiseScale: 1.0,
+  distortionStrength: 2,
+  colorNoiseScale: 0.1,
+  alphaNoiseScale: 0.1,
+  distortionNoiseScale: 0.1,
   alphaNoiseStrength: 1.0
 };
 

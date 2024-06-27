@@ -14,22 +14,8 @@ renderer.setClearColor(0xffffff, 1);
 const controls = new OrbitControls(camera, renderer.domElement);
 camera.position.z = 5;
 
-// Create functions for different geometries
-function createPlaneGeometry() {
-  return new THREE.PlaneGeometry(10, 10, 100, 100);
-}
-
-function createSphereGeometry() {
-  return new THREE.SphereGeometry(5, 100, 100);
-}
-
-function createCapsuleGeometry() {
-  return new THREE.CapsuleGeometry(5, 2, 50, 100); // radius, length, capSegments, radialSegments
-}
-
-function createDodecahedronGeometry() {
-  return new THREE.DodecahedronGeometry(5, 5); // radius
-}
+// Create a plane geometry
+const geometry = new THREE.PlaneGeometry(10, 10, 100, 100);
 
 // Custom shader material
 const material = new THREE.ShaderMaterial({
@@ -44,7 +30,6 @@ const material = new THREE.ShaderMaterial({
     colorNoiseScale: { value: 1.0 },
     alphaNoiseScale: { value: 1.0 },
     distortionNoiseScale: { value: 1.0 },
-    alphaNoiseStrength: { value: 1.0 }
   },
   vertexShader: `
     uniform float time;
@@ -152,19 +137,18 @@ const material = new THREE.ShaderMaterial({
     uniform vec4 color2;
     uniform vec4 color3;
     uniform float edgeAlpha;
-    uniform float alphaNoiseStrength;
 
     varying vec2 vUv;
     varying float colorNoise;
     varying float alphaNoise;
 
     void main() {
-      float edgeFactor = smoothstep(0.0, 0.1, min(vUv.x, min(vUv.y, min(1.0 - vUv.x, 1.0 - vUv.y))));
+      float edgeFactor = smoothstep(0.0, 0.5, min(vUv.x, min(vUv.y, min(1.0 - vUv.x, 1.0 - vUv.y))));
 
       vec4 color = mix(color1, color2, colorNoise * 0.5 + 0.5);
       color = mix(color, color3, vUv.x * vUv.y);
 
-      float alpha = mix(edgeAlpha, color.a * (alphaNoise * 0.5 + 0.5) * alphaNoiseStrength, edgeFactor);
+      float alpha = mix(edgeAlpha, color.a * (alphaNoise * 0.5 + 0.5), edgeFactor);
 
       vec3 finalColor = color.rgb * alpha;
 
@@ -173,17 +157,8 @@ const material = new THREE.ShaderMaterial({
   `,
 });
 
-// Initialize with a plane geometry
-let currentGeometry = createPlaneGeometry();
-let mesh = new THREE.Mesh(currentGeometry, material);
-scene.add(mesh);
-
-function updateGeometry(newGeometry) {
-  scene.remove(mesh);
-  mesh.geometry.dispose(); // Clean up previous geometry
-  mesh.geometry = newGeometry;
-  scene.add(mesh);
-}
+const plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
 
 // Animation loop
 function animate() {
@@ -203,14 +178,13 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-  }, 100);
+  }, 100); // Adjust debounce delay as needed
 });
 
 // GUI for adjusting colors and parameters
 const gui = new dat.GUI();
 const params = {
-  geometryType: 'Plane', // Initial geometry type
-  color1: [250, 0, 0],
+  color1: [250, 30, 10],
   color1Alpha: 1,
   color2: [0, 255, 0],
   color2Alpha: 1,
@@ -221,28 +195,16 @@ const params = {
   colorNoiseScale: 1.0,
   alphaNoiseScale: 1.0,
   distortionNoiseScale: 1.0,
-  alphaNoiseStrength: 1.0
 };
 
-// Geometry type selection
-gui.add(params, 'geometryType', ['Plane', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
-  let newGeometry;
-  switch(value) {
-    case 'Plane':
-      newGeometry = createPlaneGeometry();
-      break;
-    case 'Sphere':
-      newGeometry = createSphereGeometry();
-      break;
-    case 'Capsule':
-      newGeometry = createCapsuleGeometry();
-      break;
-    case 'Dodecahedron':
-      newGeometry = createDodecahedronGeometry();
-      break;
-  }
-  updateGeometry(newGeometry);
-});
+function updateColor(colorUniform, colorArray, alpha) {
+  colorUniform.value.set(
+    colorArray[0] / 255,
+    colorArray[1] / 255,
+    colorArray[2] / 255,
+    alpha
+  );
+}
 
 // Color 1
 const color1Folder = gui.addFolder('Color 1');
@@ -265,7 +227,6 @@ noiseFolder.add(params, 'distortionStrength', 0, 2).onChange((value) => material
 noiseFolder.add(params, 'colorNoiseScale', 0.1, 5).onChange((value) => material.uniforms.colorNoiseScale.value = value);
 noiseFolder.add(params, 'alphaNoiseScale', 0.1, 5).onChange((value) => material.uniforms.alphaNoiseScale.value = value);
 noiseFolder.add(params, 'distortionNoiseScale', 0.1, 5).onChange((value) => material.uniforms.distortionNoiseScale.value = value);
-noiseFolder.add(params, 'alphaNoiseStrength', 0, 2).onChange((value) => material.uniforms.alphaNoiseStrength.value = value);
 
 // Other parameters
 gui.add(params, 'edgeAlpha', 0, 1).onChange((value) => material.uniforms.edgeAlpha.value = value);

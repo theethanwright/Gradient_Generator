@@ -14,22 +14,8 @@ renderer.setClearColor(0xffffff, 1);
 const controls = new OrbitControls(camera, renderer.domElement);
 camera.position.z = 5;
 
-// Create functions for different geometries
-function createPlaneGeometry() {
-  return new THREE.PlaneGeometry(10, 10, 100, 100);
-}
-
-function createSphereGeometry() {
-  return new THREE.SphereGeometry(5, 100, 100);
-}
-
-function createCapsuleGeometry() {
-  return new THREE.CapsuleGeometry(5, 2, 50, 100); // radius, length, capSegments, radialSegments
-}
-
-function createDodecahedronGeometry() {
-  return new THREE.DodecahedronGeometry(5, 5); // radius
-}
+// Create a sphere geometry
+const geometry = new THREE.SphereGeometry(5, 100, 100); // Radius, widthSegments, heightSegments
 
 // Custom shader material
 const material = new THREE.ShaderMaterial({
@@ -173,17 +159,8 @@ const material = new THREE.ShaderMaterial({
   `,
 });
 
-// Initialize with a plane geometry
-let currentGeometry = createPlaneGeometry();
-let mesh = new THREE.Mesh(currentGeometry, material);
-scene.add(mesh);
-
-function updateGeometry(newGeometry) {
-  scene.remove(mesh);
-  mesh.geometry.dispose(); // Clean up previous geometry
-  mesh.geometry = newGeometry;
-  scene.add(mesh);
-}
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
 
 // Animation loop
 function animate() {
@@ -209,8 +186,7 @@ window.addEventListener('resize', () => {
 // GUI for adjusting colors and parameters
 const gui = new dat.GUI();
 const params = {
-  geometryType: 'Plane', // Initial geometry type
-  color1: [250, 0, 0],
+  color1: [250, 30, 10],
   color1Alpha: 1,
   color2: [0, 255, 0],
   color2Alpha: 1,
@@ -224,25 +200,14 @@ const params = {
   alphaNoiseStrength: 1.0
 };
 
-// Geometry type selection
-gui.add(params, 'geometryType', ['Plane', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
-  let newGeometry;
-  switch(value) {
-    case 'Plane':
-      newGeometry = createPlaneGeometry();
-      break;
-    case 'Sphere':
-      newGeometry = createSphereGeometry();
-      break;
-    case 'Capsule':
-      newGeometry = createCapsuleGeometry();
-      break;
-    case 'Dodecahedron':
-      newGeometry = createDodecahedronGeometry();
-      break;
-  }
-  updateGeometry(newGeometry);
-});
+function updateColor(colorUniform, colorArray, alpha) {
+  colorUniform.value.set(
+    colorArray[0] / 255,
+    colorArray[1] / 255,
+    colorArray[2] / 255,
+    alpha
+  );
+}
 
 // Color 1
 const color1Folder = gui.addFolder('Color 1');

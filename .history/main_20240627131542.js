@@ -28,7 +28,7 @@ function createCapsuleGeometry() {
 }
 
 function createDodecahedronGeometry() {
-  return new THREE.DodecahedronGeometry(5, 5); // radius
+  return new THREE.DodecahedronGeometry(5); // radius
 }
 
 // Custom shader material
@@ -210,7 +210,7 @@ window.addEventListener('resize', () => {
 const gui = new dat.GUI();
 const params = {
   geometryType: 'Plane', // Initial geometry type
-  color1: [250, 0, 0],
+  color1: [250, 30, 10],
   color1Alpha: 1,
   color2: [0, 255, 0],
   color2Alpha: 1,
