@@ -224,25 +224,7 @@ const params = {
   alphaNoiseStrength: 1.0,
 };
 
-// Geometry type selection
-gui.add(params, 'geometryType', ['Plane', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
-  let newGeometry;
-  switch(value) {
-    case 'Plane':
-      newGeometry = createPlaneGeometry();
-      break;
-    case 'Sphere':
-      newGeometry = createSphereGeometry();
-      break;
-    case 'Capsule':
-      newGeometry = createCapsuleGeometry();
-      break;
-    case 'Dodecahedron':
-      newGeometry = createDodecahedronGeometry();
-      break;
-  }
-  updateGeometry(newGeometry);
-});
+
 
 // Color 1
 const color1Folder = gui.addFolder('Color 1');

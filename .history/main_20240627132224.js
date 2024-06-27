@@ -209,7 +209,6 @@ window.addEventListener('resize', () => {
 // GUI for adjusting colors and parameters
 const gui = new dat.GUI();
 const params = {
-  geometryType: 'Plane', // Initial geometry type,
   color1: [250, 0, 0],
   color1Alpha: 1,
   color2: [0, 255, 0],
@@ -222,6 +221,7 @@ const params = {
   alphaNoiseScale: 1.0,
   distortionNoiseScale: 1.0,
   alphaNoiseStrength: 1.0,
+  geometryType: 'Plane', // Initial geometry type,
 };
 
 // Geometry type selection

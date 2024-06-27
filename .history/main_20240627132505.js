@@ -14,22 +14,7 @@ renderer.setClearColor(0xffffff, 1);
 const controls = new OrbitControls(camera, renderer.domElement);
 camera.position.z = 5;
 
-// Create functions for different geometries
-function createPlaneGeometry() {
-  return new THREE.PlaneGeometry(10, 10, 100, 100);
-}
 
-function createSphereGeometry() {
-  return new THREE.SphereGeometry(5, 100, 100);
-}
-
-function createCapsuleGeometry() {
-  return new THREE.CapsuleGeometry(5, 2, 50, 100); // radius, length, capSegments, radialSegments
-}
-
-function createDodecahedronGeometry() {
-  return new THREE.DodecahedronGeometry(5, 5); // radius
-}
 
 // Custom shader material
 const material = new THREE.ShaderMaterial({

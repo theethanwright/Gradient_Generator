@@ -209,7 +209,6 @@ window.addEventListener('resize', () => {
 // GUI for adjusting colors and parameters
 const gui = new dat.GUI();
 const params = {
-  geometryType: 'Plane', // Initial geometry type,
   color1: [250, 0, 0],
   color1Alpha: 1,
   color2: [0, 255, 0],
@@ -222,27 +221,9 @@ const params = {
   alphaNoiseScale: 1.0,
   distortionNoiseScale: 1.0,
   alphaNoiseStrength: 1.0,
+  geometryType: 'Plane', // Initial geometry type,
 };
 
-// Geometry type selection
-gui.add(params, 'geometryType', ['Plane', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
-  let newGeometry;
-  switch(value) {
-    case 'Plane':
-      newGeometry = createPlaneGeometry();
-      break;
-    case 'Sphere':
-      newGeometry = createSphereGeometry();
-      break;
-    case 'Capsule':
-      newGeometry = createCapsuleGeometry();
-      break;
-    case 'Dodecahedron':
-      newGeometry = createDodecahedronGeometry();
-      break;
-  }
-  updateGeometry(newGeometry);
-});
 
 // Color 1
 const color1Folder = gui.addFolder('Color 1');
@@ -269,6 +250,26 @@ noiseFolder.add(params, 'alphaNoiseStrength', 0, 2).onChange((value) => material
 
 // Other parameters
 gui.add(params, 'edgeAlpha', 0, 1).onChange((value) => material.uniforms.edgeAlpha.value = value);
+
+// Geometry type selection
+gui.add(params, 'geometryType', ['Plane', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
+    let newGeometry;
+    switch(value) {
+      case 'Plane':
+        newGeometry = createPlaneGeometry();
+        break;
+      case 'Sphere':
+        newGeometry = createSphereGeometry();
+        break;
+      case 'Capsule':
+        newGeometry = createCapsuleGeometry();
+        break;
+      case 'Dodecahedron':
+        newGeometry = createDodecahedronGeometry();
+        break;
+    }
+    updateGeometry(newGeometry);
+  });
 
 // Open all folders
 color1Folder.open();
