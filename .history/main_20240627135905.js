@@ -20,21 +20,26 @@ function createPlaneGeometry() {
 }
 
 function createCircleGeometry() {
-    
+    return new THREE.Shape();
+
     let x = 1; let y = 1; let width = 50; let height = 50; let radius = 20
         
-    const roundPlane = new THREE.Shape();
-    roundPlane.moveTo( x, y + radius );
-    roundPlane.lineTo( x, y + height - radius );
-    roundPlane.quadraticCurveTo( x, y + height, x + radius, y + height );
-    roundPlane.lineTo( x + width - radius, y + height );
-    roundPlane.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
-    roundPlane.lineTo( x + width, y + radius );
-    roundPlane.quadraticCurveTo( x + width, y, x + width - radius, y );
-    roundPlane.lineTo( x + radius, y );
-    roundPlane.quadraticCurveTo( x, y, x, y + radius );
+    let shape = new THREE.Shape();
+    shape.moveTo( x, y + radius );
+    shape.lineTo( x, y + height - radius );
+    shape.quadraticCurveTo( x, y + height, x + radius, y + height );
+    shape.lineTo( x + width - radius, y + height );
+    shape.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
+    shape.lineTo( x + width, y + radius );
+    shape.quadraticCurveTo( x + width, y, x + width - radius, y );
+    shape.lineTo( x + radius, y );
+    shape.quadraticCurveTo( x, y, x, y + radius );
 
-    return new THREE.BufferGeometry( roundPlane );
+    let geometry = new THREE.ShapeBufferGeometry( shape );
+
+    this.mesh = new THREE.Mesh(geometry, material)
+    this.mesh.rotation.x = -Math.PI / 2
+    this.container.add(this.mesh)
   }
 
 function createSphereGeometry() {

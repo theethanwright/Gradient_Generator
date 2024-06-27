@@ -19,24 +19,6 @@ function createPlaneGeometry() {
   return new THREE.PlaneGeometry(10, 10, 100, 100);
 }
 
-function createCircleGeometry() {
-    
-    let x = 1; let y = 1; let width = 50; let height = 50; let radius = 20
-        
-    const roundPlane = new THREE.Shape();
-    roundPlane.moveTo( x, y + radius );
-    roundPlane.lineTo( x, y + height - radius );
-    roundPlane.quadraticCurveTo( x, y + height, x + radius, y + height );
-    roundPlane.lineTo( x + width - radius, y + height );
-    roundPlane.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
-    roundPlane.lineTo( x + width, y + radius );
-    roundPlane.quadraticCurveTo( x + width, y, x + width - radius, y );
-    roundPlane.lineTo( x + radius, y );
-    roundPlane.quadraticCurveTo( x, y, x, y + radius );
-
-    return new THREE.BufferGeometry( roundPlane );
-  }
-
 function createSphereGeometry() {
   return new THREE.SphereGeometry(5, 100, 100);
 }
@@ -46,16 +28,16 @@ function createCapsuleGeometry() {
 }
 
 function createDodecahedronGeometry() {
-  return new THREE.DodecahedronGeometry(5, 5); // radius
+  return new THREE.DodecahedronGeometry(5); // radius
 }
 
 // Custom shader material
 const material = new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0 },
-    color1: { value: new THREE.Vector4(255 / 255, 108 / 255, 2 / 255, 1) }, // Purple
-    color2: { value: new THREE.Vector4(1 / 255, 26 / 255, 255 / 255, 1) },   // Green
-    color3: { value: new THREE.Vector4(250 / 255, 23 / 255, 255 / 255, 1) },   // Blue
+    color1: { value: new THREE.Vector4(255 / 255, 187 / 255, 0 / 255, 1) }, // Purple
+    color2: { value: new THREE.Vector4(0 / 255, 128 / 255, 0 / 255, 1) },   // Green
+    color3: { value: new THREE.Vector4(0 / 255, 0 / 255, 128 / 255, 1) },   // Blue
     edgeAlpha: { value: 0.0 },
     noiseScale: { value: 1.0 },
     distortionStrength: { value: 0.5 },
@@ -228,11 +210,11 @@ window.addEventListener('resize', () => {
 const gui = new dat.GUI();
 const params = {
   geometryType: 'Plane', // Initial geometry type
-  color1: [255, 108, 2],
+  color1: [250, 30, 10],
   color1Alpha: 1,
-  color2: [1, 26, 255],
+  color2: [0, 255, 0],
   color2Alpha: 1,
-  color3: [250, 23, 255],
+  color3: [0, 0, 255],
   color3Alpha: 1,
   edgeAlpha: 0.0,
   distortionStrength: 0.5,
@@ -243,14 +225,11 @@ const params = {
 };
 
 // Geometry type selection
-gui.add(params, 'geometryType', ['Plane', 'Circle', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
+gui.add(params, 'geometryType', ['Plane', 'Sphere', 'Capsule', 'Dodecahedron']).onChange((value) => {
   let newGeometry;
   switch(value) {
     case 'Plane':
       newGeometry = createPlaneGeometry();
-      break;
-    case 'Circle':
-      newGeometry = createCircleGeometry();
       break;
     case 'Sphere':
       newGeometry = createSphereGeometry();

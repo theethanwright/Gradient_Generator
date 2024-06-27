@@ -34,7 +34,9 @@ function createCircleGeometry() {
     roundPlane.lineTo( x + radius, y );
     roundPlane.quadraticCurveTo( x, y, x, y + radius );
 
-    return new THREE.BufferGeometry( roundPlane );
+    let geometry = new THREE.BufferGeometry( roundPlane );
+
+    return new THREE.ShapeGeometry( geometry );
   }
 
 function createSphereGeometry() {
