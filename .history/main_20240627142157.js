@@ -235,10 +235,10 @@ const params = {
   color3: [250, 23, 255],
   color3Alpha: 1,
   edgeAlpha: 0.0,
-  distortionStrength: 2,
-  colorNoiseScale: 0.2,
-  alphaNoiseScale: 0.2,
-  distortionNoiseScale: 0.2,
+  distortionStrength: 0.5,
+  colorNoiseScale: 1.0,
+  alphaNoiseScale: 1.0,
+  distortionNoiseScale: 1.0,
   alphaNoiseStrength: 1.0
 };
 
